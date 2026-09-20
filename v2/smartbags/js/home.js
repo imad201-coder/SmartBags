@@ -44,7 +44,7 @@ function renderProductGrid(data, lang) {
       <h3 class="card-name">${p.name}</h3>
       <div class="card-bottom">
         <div class="card-price">
-          <span class="price-new">${formatPrice(p.price, lang)}</span>
+          <span class="price-new" dir="ltr">${formatPrice(p.price, lang)}</span>
           ${p.oldPrice ? `<span class="price-old">${formatPrice(p.oldPrice, lang)}</span>` : ''}
         </div>
         <a class="btn btn-gold card-buy" href="product.html?id=${encodeURIComponent(p.id)}">${t('buyNow', lang)}</a>
