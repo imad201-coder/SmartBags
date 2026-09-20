@@ -1,6 +1,12 @@
 /* SmartBags — common.js
    Renders the navbar and footer from already-fetched store data.
-   Include data.js before this file on every page. */
+   Include data.js before this file on every page.  \[],  */
+{
+   "rewrites": [
+      { "source": "/", "destination": "/home.html" }
+   ]
+}
+
 
 function renderNavbar(data, activePage) {
   const mount = document.getElementById('site-navbar');
