@@ -16,7 +16,7 @@ function renderNavbar(data, activePage) {
       </nav>
       <a href="home.html" class="nav-logo"><img src="${data.site.logo}" alt="${data.site.shopName}"></a>
       <div class="nav-cta">
-        <span class="nav-cta-text" onclick="window.location.href='tel:0564622967'">${data.site.phone}</span>
+        <span class="nav-cta-text">${data.site.phone}</span>
       </div>
     </div>
   `;
