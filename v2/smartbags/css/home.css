@@ -1,0 +1,110 @@
+/* ============================================================
+   SmartBags — home.css
+   ============================================================ */
+
+.hero {
+  display: block;
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+.hero img {
+  width: 100%;
+  height: auto;
+  transition: transform 0.6s ease;
+}
+.hero:hover img { transform: scale(1.015); }
+
+/* ---------- shop section ---------- */
+.shop {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 76px 32px 40px;
+}
+.shop-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 36px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 22px;
+}
+.shop-head h2 {
+  font-size: clamp(28px, 3.4vw, 38px);
+  margin: 0;
+}
+.shop-head p { margin: 0; max-width: 360px; text-align: right; font-size: 14px; }
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 36px 28px;
+}
+@media (max-width: 980px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .shop-head { flex-direction: column; align-items: flex-start; }
+  .shop-head p { text-align: left; }
+}
+@media (max-width: 520px) {
+  .product-grid { grid-template-columns: 1fr; gap: 32px; }
+  .shop { padding: 56px 20px 20px; }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+}
+.card-media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  background: var(--navy-900);
+  border: 1px solid var(--line);
+}
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.card:hover .card-media img { transform: scale(1.04); }
+.card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--gold-500);
+  color: var(--navy-950);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+.card-name {
+  margin-top: 16px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 15.5px;
+  color: var(--cream);
+}
+.card-bottom {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.card-price { display: flex; flex-direction: column; }
+.price-new { font-weight: 800; font-size: 16px; color: var(--gold-300); }
+.price-old {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--danger);
+}
+.card-buy {
+  padding: 10px 20px;
+  font-size: 13.5px;
+}

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartBags</title>
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/product.css">
+</head>
+<body>
+
+<header id="site-navbar" class="nav"></header>
+
+<main>
+  <section class="product-main">
+    <div class="slider" id="slider">
+      <div class="slider-track" id="slider-track"></div>
+      <button class="slider-btn slider-prev" id="slider-prev" aria-label="Previous image">‹</button>
+      <button class="slider-btn slider-next" id="slider-next" aria-label="Next image">›</button>
+      <div class="slider-dots" id="slider-dots"></div>
+    </div>
+    <div class="product-info" id="product-info"></div>
+  </section>
+
+  <section class="features product-features" id="product-features"></section>
+
+  <section class="product-description" id="product-description"></section>
+</main>
+
+<footer id="site-footer" class="footer"></footer>
+
+<div class="modal-overlay" id="buy-modal">
+  <div class="modal-panel">
+    <button class="modal-close" id="modal-close" aria-label="Close">×</button>
+    <h3 class="modal-title">Complete your order</h3>
+    <p class="modal-sub">Fill in your details — you pay in cash when your order arrives.</p>
+    <form id="buy-form" novalidate>
+      <div class="field">
+        <label>Color</label>
+        <input type="text" id="modal-color-value" value="" readonly tabindex="-1">
+      </div>
+      <div class="field">
+        <label for="field-name">Full name</label>
+        <input type="text" id="field-name" name="name" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="field-phone">Phone number</label>
+        <input type="tel" id="field-phone" name="phone" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label for="field-address">Address</label>
+        <textarea id="field-address" name="address" rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label for="field-province">Province</label>
+        <select id="field-province" name="province"></select>
+      </div>
+      <div class="field">
+        <label>Delivery type</label>
+        <div class="delivery-type">
+          <label class="delivery-option is-checked">
+            <input type="radio" name="delivery-type" value="desk" checked>
+            Stop desk
+          </label>
+          <label class="delivery-option">
+            <input type="radio" name="delivery-type" value="domicile">
+            Home delivery
+          </label>
+        </div>
+      </div>
+      <div class="order-total">
+        <span class="order-total-label">Total to pay</span>
+        <span class="order-total-value" id="order-total-value">—</span>
+      </div>
+      <p class="field-error" id="form-error"></p>
+      <button type="submit" class="btn btn-gold btn-block" style="margin-top:18px;">Confirm order</button>
+    </form>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/product.js"></script>
+</body>
+</html>

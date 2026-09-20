@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — SmartBags</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div class="modal-overlay" id="admin-login-gate" style="display:flex;">
+  <div class="modal-panel">
+    <h3 class="modal-title">SmartBags admin</h3>
+    <p class="modal-sub">Enter the admin password to manage the store.</p>
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" autocomplete="current-password" autofocus>
+      </div>
+      <p class="field-error" id="login-error">Incorrect password.</p>
+      <button type="submit" class="btn btn-gold btn-block" style="margin-top:6px;">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<div id="admin-app" style="display:none;">
+
+<header id="site-navbar" class="nav"></header>
+
+<main class="admin-main" id="admin-app-body">
+  <div class="admin-head">
+    <div>
+      <h1>Store admin</h1>
+      <p>Changes here save to the live store — everyone who visits the site sees them.</p>
+    </div>
+    <button class="icon-btn" id="admin-logout">Sign out</button>
+  </div>
+
+  <nav class="admin-tabs">
+    <button class="admin-tab is-active" data-tab="settings">Shop &amp; images</button>
+    <button class="admin-tab" data-tab="icons">Feature icons</button>
+    <button class="admin-tab" data-tab="products">Products</button>
+    <button class="admin-tab" data-tab="provinces">Delivery fees</button>
+    <button class="admin-tab" data-tab="orders">Orders</button>
+    <button class="admin-tab" data-tab="backup">Backup</button>
+  </nav>
+
+  <section class="admin-panel is-active" id="tab-settings"></section>
+
+  <section class="admin-panel" id="tab-icons">
+    <div class="admin-card">
+      <h2>Feature icons</h2>
+      <div id="icons-list"></div>
+      <div class="admin-actions">
+        <button class="icon-btn gold" id="add-icon">Add icon</button>
+      </div>
+    </div>
+    <button class="btn btn-gold" id="save-icons">Save changes</button>
+  </section>
+
+  <section class="admin-panel" id="tab-products">
+    <div id="products-list"></div>
+    <div class="admin-actions" style="margin-bottom:22px;">
+      <button class="icon-btn gold" id="add-product">Add new product</button>
+    </div>
+    <button class="btn btn-gold" id="save-products">Save changes</button>
+  </section>
+
+  <section class="admin-panel" id="tab-provinces">
+    <div class="admin-card">
+      <h2>Delivery fee by province</h2>
+      <p style="margin-bottom:16px;">Each wilaya has its own stop-desk and home-delivery price — edit any value directly.</p>
+      <div class="province-table-wrap">
+        <table class="province-table">
+          <thead><tr><th>Province</th><th>Stop desk (DA)</th><th>Home delivery (DA)</th></tr></thead>
+          <tbody id="provinces-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <button class="btn btn-gold" id="save-provinces">Save changes</button>
+  </section>
+
+  <section class="admin-panel" id="tab-orders">
+    <div class="admin-card">
+      <div class="admin-head" style="margin-bottom:0;">
+        <h2 style="margin:0;">Customer orders</h2>
+        <button class="icon-btn gold" id="refresh-orders">Refresh</button>
+      </div>
+      <p style="margin:10px 0 16px;">Orders placed through the buy form on the product page appear here.</p>
+      <div class="orders-table-wrap" id="orders-table-wrap">
+        <table class="orders-table">
+          <thead><tr><th>Date</th><th>Customer</th><th>Product</th><th>Total</th><th>Status</th><th></th></tr></thead>
+          <tbody id="orders-table-body"></tbody>
+        </table>
+      </div>
+      <div class="orders-empty" id="orders-empty">No orders yet.</div>
+    </div>
+  </section>
+
+  <section class="admin-panel" id="tab-backup">
+    <div class="admin-card">
+      <h2>Export &amp; import</h2>
+      <p style="margin-bottom:16px;">Export a backup of the live store anytime, or restore it on another deployment by importing a file here (this overwrites the current live data).</p>
+      <div class="backup-buttons">
+        <button class="btn btn-outline" id="export-data">Export data (.json)</button>
+        <label class="file-btn">Import data<input type="file" id="import-file" accept="application/json"></label>
+      </div>
+    </div>
+    <div class="admin-card">
+      <h2>Reload</h2>
+      <p style="margin-bottom:16px;">Discard any unsaved edits on this page and reload the current live data from the server.</p>
+      <button class="icon-btn" id="reset-data">Reload from server</button>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer" class="footer"></footer>
+
+<div class="admin-toast" id="admin-toast"></div>
+
+<div class="modal-overlay" id="order-modal">
+  <div class="modal-panel">
+    <button class="modal-close" id="order-modal-close" aria-label="Close">×</button>
+    <h3 class="modal-title">Order details</h3>
+    <p class="modal-sub">Review the order and update its status.</p>
+    <div id="order-modal-body"></div>
+    <div class="admin-field" style="margin-top:18px;">
+      <label for="order-status-select">Status</label>
+      <select id="order-status-select">
+        <option value="waiting">Waiting</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+    <button class="btn btn-gold btn-block" id="save-order-status">Save status</button>
+  </div>
+</div>
+
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

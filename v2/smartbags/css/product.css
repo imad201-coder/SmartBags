@@ -1,0 +1,160 @@
+/* ============================================================
+   SmartBags — product.css
+   ============================================================ */
+
+.product-main {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 56px 32px 20px;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 56px;
+}
+@media (max-width: 900px) {
+  .product-main { grid-template-columns: 1fr; padding: 32px 20px 10px; gap: 28px; }
+}
+
+/* ---------- slider ---------- */
+.slider {
+  position: relative;
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  background: var(--navy-900);
+  border: 1px solid var(--line);
+}
+.slider-track {
+  display: flex;
+  aspect-ratio: 1 / 1;
+  transition: transform 0.45s cubic-bezier(.65,0,.35,1);
+}
+.slider-track img { width: 100%; height: 100%; object-fit: cover; flex: none; }
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(5, 11, 22, 0.7);
+  color: var(--cream);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slider-btn:hover { border-color: var(--gold-500); color: var(--gold-300); }
+.slider-prev { left: 14px; }
+.slider-next { right: 14px; }
+.slider-dots {
+  position: absolute;
+  bottom: 14px;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.slider-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(246, 243, 236, 0.35);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.slider-dot.is-active { background: var(--gold-300); }
+
+/* ---------- product info ---------- */
+.product-info { display: flex; flex-direction: column; }
+.product-name {
+  font-size: clamp(28px, 3.6vw, 40px);
+  font-weight: 500;
+}
+.product-short { font-size: 15px; margin-bottom: 22px; }
+.product-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+.product-price-new { font-size: 26px; font-weight: 800; color: var(--gold-300); }
+.product-price-old {
+  font-size: 17px;
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--danger);
+}
+.product-buy-btn { max-width: 320px; }
+
+.product-features { margin: 34px 0 6px; padding: 26px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.product-features .features-inner { padding: 0; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+
+.product-description {
+  max-width: var(--max-w);
+  margin: 40px auto 80px;
+  padding: 0 32px;
+}
+.product-description h2 { font-size: 22px; margin-bottom: 14px; }
+.product-description p { max-width: 760px; font-size: 15.5px; color: var(--muted); }
+@media (max-width: 520px) { .product-description { padding: 0 20px; } }
+
+/* ---------- color picker (product page) ---------- */
+.color-picker { margin-bottom: 26px; }
+.color-picker-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.color-picker-label .color-picker-current { color: var(--gold-300); }
+.color-swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+.color-swatch {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.color-swatch span {
+  display: block;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 1px solid rgba(246,243,236,0.18);
+}
+.color-swatch.is-selected { border-color: var(--gold-500); }
+
+/* ---------- buy popup ---------- */
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.delivery-type { display: flex; gap: 10px; }
+.delivery-option {
+  flex: 1;
+  border: 1px solid var(--navy-600);
+  border-radius: var(--radius-s);
+  padding: 12px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.delivery-option input { display: none; }
+.delivery-option.is-checked { border-color: var(--gold-500); color: var(--gold-300); background: rgba(207,157,79,0.08); }
+
+.order-total {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.order-total-label { font-size: 13.5px; color: var(--muted); font-weight: 700; }
+.order-total-value { font-size: 22px; font-weight: 800; color: var(--gold-300); }
+
+.field-error { font-size: 12.5px; color: var(--danger); margin-top: 12px; display: none; }
+.field-error.is-visible { display: block; }

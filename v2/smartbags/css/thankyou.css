@@ -1,0 +1,44 @@
+/* ============================================================
+   SmartBags — thankyou.css
+   ============================================================ */
+
+.thankyou {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 100px 32px 120px;
+  text-align: center;
+}
+.thankyou-mark {
+  width: 64px; height: 64px;
+  margin: 0 auto 26px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  color: var(--gold-300);
+}
+.thankyou h1 { font-size: clamp(28px, 4vw, 38px); margin-bottom: 10px; }
+.thankyou > p.lead { font-size: 15.5px; margin-bottom: 36px; }
+
+.order-card {
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  padding: 26px 28px;
+  margin-bottom: 36px;
+}
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--navy-800);
+  font-size: 14.5px;
+}
+.order-row:last-child { border-bottom: none; }
+.order-row span:first-child { color: var(--muted); }
+.order-row.total span:last-child { color: var(--gold-300); font-weight: 800; font-size: 17px; }
+
+@media (max-width: 520px) {
+  .thankyou { padding: 70px 20px 90px; }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "smartbags-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SmartBags storefront — static frontend + Vercel serverless API backed by Vercel KV.",
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
+  }
+}
