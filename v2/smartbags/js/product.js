@@ -84,9 +84,9 @@ function renderProductInfo() {
   mount.innerHTML = `
     <h1 class="product-name">${currentProduct.name}</h1>
     <p class="product-short">${currentProduct.short}</p>
-    <div class="product-price-row" dir="ltr">
-      <span class="product-price-new">${formatPrice(currentProduct.price, pageLang)}</span>
-      ${currentProduct.oldPrice ? `<span class="product-price-old">${formatPrice(currentProduct.oldPrice, pageLang)}</span>` : ''}
+    <div class="product-price-row">
+      <span class="product-price-new" dir="ltr">${formatPrice(currentProduct.price, pageLang)}</span>
+      ${currentProduct.oldPrice ? `<span class="product-price-old" dir="ltr">${formatPrice(currentProduct.oldPrice, pageLang)}</span>` : ''}
     </div>
     <div id="color-picker" class="color-picker"></div>
     <button class="btn btn-gold product-buy-btn" id="open-buy">${t('buyNow', pageLang)}</button>
