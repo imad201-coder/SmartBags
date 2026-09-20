@@ -90,7 +90,7 @@ const TRANSLATIONS = {
     totalDueLabel: 'المبلغ الإجمالي عند التسليم',
     continueShopping: 'متابعة التسوق',
     loadError: 'تعذر تحميل المتجر حاليًا. يرجى تحديث الصفحة أو المحاولة لاحقًا.',
-    currency: 'دج'
+    currency: 'DA'
   }
 };
 
