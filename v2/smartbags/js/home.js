@@ -43,7 +43,7 @@ function renderProductGrid(data, lang) {
       </a>
       <h3 class="card-name">${p.name}</h3>
       <div class="card-bottom">
-        <div class="card-price" dir="ltr">
+        <div class="card-price">
           <span class="price-new">${formatPrice(p.price, lang)}</span>
           ${p.oldPrice ? `<span class="price-old">${formatPrice(p.oldPrice, lang)}</span>` : ''}
         </div>
