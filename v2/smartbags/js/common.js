@@ -58,7 +58,7 @@ function renderFooter(data) {
         <p class="footer-greeting">${data.site.greeting}.</p>
       </div>
       <div class="footer-phone">
-        <span class="label">Order by phone</span>
+        <span class="label" onclick="window.location.href='tel:0564622967'">Order by phone</span>
         ${data.site.phone}
       </div>
     </div>
