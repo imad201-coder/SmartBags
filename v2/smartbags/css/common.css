@@ -162,6 +162,26 @@ p { margin: 0 0 1em; color: var(--muted); }
   cursor: pointer;
 }
 
+/* ---------- language switch ---------- */
+.lang-switch {
+  display: flex;
+  border: 1px solid var(--navy-600);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.lang-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.lang-btn.is-active { background: var(--gold-500); color: var(--navy-950); }
+
 @media (max-width: 760px) {
   .nav-inner { grid-template-columns: auto 1fr auto; padding: 14px 20px; }
   .nav-links {
@@ -330,3 +350,9 @@ p { margin: 0 0 1em; color: var(--muted); }
 .field textarea:focus { border-color: var(--gold-500); }
 .field input:disabled,
 .field input[readonly] { opacity: 0.75; }
+
+/* ---------- RTL adjustments ----------
+   Flex/grid ordering and text alignment already follow `direction`
+   automatically; only a few absolutely-positioned elements need an
+   explicit mirror. */
+[dir="rtl"] .modal-close { right: auto; left: 16px; }

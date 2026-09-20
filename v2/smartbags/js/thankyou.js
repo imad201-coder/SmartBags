@@ -1,17 +1,20 @@
 /* SmartBags — thankyou.js */
 
 document.addEventListener('DOMContentLoaded', async () => {
+  const lang = getLang();
+  applyDirection(lang);
+
   let data;
   try {
     data = await getData();
   } catch (e) {
     console.error(e);
-    renderLoadError();
+    renderLoadError(lang);
     return;
   }
 
-  renderNavbar(data, '');
-  renderFooter(data);
+  renderNavbar(data, '', lang, true);
+  renderFooter(data, lang);
 
   const raw = sessionStorage.getItem('smartbags_last_order');
   const order = raw ? JSON.parse(raw) : null;
@@ -20,26 +23,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!order) {
     mount.innerHTML = `
       <div class="thankyou-mark">✓</div>
-      <h1>Thank you!</h1>
-      <p class="lead">Your visit means a lot to us. Browse the collection to place an order.</p>
-      <a class="btn btn-gold" href="home.html">Back to shop</a>
+      <h1>${t('thankyouTitleNoOrder', lang)}</h1>
+      <p class="lead">${t('thankyouLeadNoOrder', lang)}</p>
+      <a class="btn btn-gold" href="home.html">${t('backToShop', lang)}</a>
     `;
     return;
   }
 
-  const deliveryLabel = order.deliveryType === 'domicile' ? 'Home delivery' : 'Stop desk';
+  const deliveryLabel = order.deliveryType === 'domicile' ? t('homeDelivery', lang) : t('stopDesk', lang);
 
   mount.innerHTML = `
     <div class="thankyou-mark">✓</div>
-    <h1>Order received, ${escapeHtml(order.name)}</h1>
-    <p class="lead">${data.site.greeting}. We'll call you at ${escapeHtml(order.phone)} to confirm your order shortly.</p>
+    <h1>${tf('orderReceived', { name: escapeHtml(order.name) }, lang)}</h1>
+    <p class="lead">${data.site.greeting}. ${tf('thankyouCallBack', { phone: '<span dir="ltr">' + escapeHtml(order.phone) + '</span>' }, lang)}</p>
     <div class="order-card">
-      <div class="order-row"><span>Product</span><span>${escapeHtml(order.productName)}${order.color ? ' — ' + escapeHtml(order.color) : ''}</span></div>
-      <div class="order-row"><span>Delivery</span><span>${deliveryLabel} — ${escapeHtml(order.province)}</span></div>
-      <div class="order-row"><span>Address</span><span>${escapeHtml(order.address)}</span></div>
-      <div class="order-row total"><span>Total to pay on delivery</span><span>${formatPrice(order.total)}</span></div>
+      <div class="order-row"><span>${t('productLabel', lang)}</span><span>${escapeHtml(order.productName)}${order.color ? ' — ' + escapeHtml(order.color) : ''}</span></div>
+      <div class="order-row"><span>${t('deliveryLabel', lang)}</span><span>${deliveryLabel} — ${escapeHtml(order.province)}</span></div>
+      <div class="order-row"><span>${t('addressLabel2', lang)}</span><span>${escapeHtml(order.address)}</span></div>
+      <div class="order-row total"><span>${t('totalDueLabel', lang)}</span><span>${formatPrice(order.total, lang)}</span></div>
     </div>
-    <a class="btn btn-outline" href="home.html">Continue shopping</a>
+    <a class="btn btn-outline" href="home.html">${t('continueShopping', lang)}</a>
   `;
 
   sessionStorage.removeItem('smartbags_last_order');

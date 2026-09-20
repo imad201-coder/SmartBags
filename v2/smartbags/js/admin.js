@@ -66,8 +66,8 @@ async function bootAdmin() {
     return;
   }
 
-  renderNavbar(adminData, '');
-  renderFooter(adminData);
+  renderNavbar(adminData, '', 'en', false);
+  renderFooter(adminData, 'en');
   wireTabs();
   renderSettingsTab();
   renderIconsTab();
@@ -199,8 +199,8 @@ function renderSettingsTab() {
 
   document.getElementById('save-settings').addEventListener('click', () => withAuthGuard(async () => {
     await saveData(adminData);
-    renderNavbar(adminData, '');
-    renderFooter(adminData);
+    renderNavbar(adminData, '', 'en', false);
+    renderFooter(adminData, 'en');
     toast('Settings saved');
   }));
 }
@@ -506,8 +506,8 @@ function wireBackupTab() {
     if (!parsed.site || !parsed.products || !parsed.provinces) throw new Error('Invalid file');
     adminData = parsed;
     await saveData(adminData);
-    renderNavbar(adminData, '');
-    renderFooter(adminData);
+    renderNavbar(adminData, '', 'en', false);
+    renderFooter(adminData, 'en');
     renderSettingsTab();
     renderIconsTab();
     renderProductsTab();
@@ -519,8 +519,8 @@ function wireBackupTab() {
   document.getElementById('reset-data').addEventListener('click', () => withAuthGuard(async () => {
     if (!confirm('Reload store data from the server? Any unsaved changes on this page will be lost.')) return;
     adminData = await getData();
-    renderNavbar(adminData, '');
-    renderFooter(adminData);
+    renderNavbar(adminData, '', 'en', false);
+    renderFooter(adminData, 'en');
     renderSettingsTab();
     renderIconsTab();
     renderProductsTab();

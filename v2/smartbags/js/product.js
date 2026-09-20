@@ -4,18 +4,23 @@ let storeData = null;
 let currentProduct = null;
 let sliderIndex = 0;
 let selectedColor = null;
+let pageLang = 'ar';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  pageLang = getLang();
+  applyDirection(pageLang);
+  applyStaticTranslations(pageLang);
+
   try {
     storeData = await getData();
   } catch (e) {
     console.error(e);
-    renderLoadError();
+    renderLoadError(pageLang);
     return;
   }
 
-  renderNavbar(storeData, 'product');
-  renderFooter(storeData);
+  renderNavbar(storeData, 'product', pageLang, true);
+  renderFooter(storeData, pageLang);
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
@@ -80,11 +85,11 @@ function renderProductInfo() {
     <h1 class="product-name">${currentProduct.name}</h1>
     <p class="product-short">${currentProduct.short}</p>
     <div class="product-price-row">
-      <span class="product-price-new">${formatPrice(currentProduct.price)}</span>
-      ${currentProduct.oldPrice ? `<span class="product-price-old">${formatPrice(currentProduct.oldPrice)}</span>` : ''}
+      <span class="product-price-new">${formatPrice(currentProduct.price, pageLang)}</span>
+      ${currentProduct.oldPrice ? `<span class="product-price-old">${formatPrice(currentProduct.oldPrice, pageLang)}</span>` : ''}
     </div>
     <div id="color-picker" class="color-picker"></div>
-    <button class="btn btn-gold product-buy-btn" id="open-buy">Buy now</button>
+    <button class="btn btn-gold product-buy-btn" id="open-buy">${t('buyNow', pageLang)}</button>
   `;
   document.getElementById('open-buy').addEventListener('click', openModal);
 }
@@ -95,7 +100,7 @@ function renderColorPicker() {
   if (!currentProduct.colors || !currentProduct.colors.length) { mount.innerHTML = ''; return; }
 
   mount.innerHTML = `
-    <div class="color-picker-label">Color — <span class="color-picker-current" id="color-current">${selectedColor.name}</span></div>
+    <div class="color-picker-label">${t('colorLabel', pageLang)} — <bdi class="color-picker-current" id="color-current">${selectedColor.name}</bdi></div>
     <div class="color-swatches">
       ${currentProduct.colors.map((c, i) => `
         <button type="button" class="color-swatch${i === 0 ? ' is-selected' : ''}" data-i="${i}" style="background:${c.hex}44;" aria-label="${c.name}" title="${c.name}">
@@ -121,7 +126,7 @@ function renderDescription() {
   const mount = document.getElementById('product-description');
   if (!mount) return;
   mount.innerHTML = `
-    <h2>Description</h2>
+    <h2>${t('description', pageLang)}</h2>
     <p>${currentProduct.description}</p>
   `;
 }
@@ -144,8 +149,8 @@ function wireModal() {
   function renderProvinceOptions() {
     const type = currentType();
     const prev = provinceSelect.value;
-    provinceSelect.innerHTML = `<option value="" disabled${prev ? '' : ' selected'}>Select your province</option>` +
-      sortedProvinces.map(p => `<option value="${p.name}" data-fee="${feeForType(p, type)}"${p.name === prev ? ' selected' : ''}>${p.name} — ${formatPrice(feeForType(p, type))}</option>`).join('');
+    provinceSelect.innerHTML = `<option value="" disabled${prev ? '' : ' selected'}>${t('provincePlaceholder', pageLang)}</option>` +
+      sortedProvinces.map(p => `<option value="${p.name}" data-fee="${feeForType(p, type)}"${p.name === prev ? ' selected' : ''}>${p.name} — ${formatPrice(feeForType(p, type), pageLang)}</option>`).join('');
   }
   renderProvinceOptions();
 
@@ -156,8 +161,9 @@ function wireModal() {
   }
 
   function updateTotal() {
-    totalValue.textContent = provinceSelect.value ? formatPrice(currentTotal()) : formatPrice(currentProduct.price);
+    totalValue.textContent = provinceSelect.value ? formatPrice(currentTotal(), pageLang) : formatPrice(currentProduct.price, pageLang);
   }
+  updateTotal();
 
   provinceSelect.addEventListener('change', updateTotal);
   deliveryInputs.forEach(input => {
@@ -182,12 +188,12 @@ function wireModal() {
     const deliveryType = document.querySelector('input[name="delivery-type"]:checked')?.value;
 
     if (!name || !phone || !address || !province || !deliveryType) {
-      error.textContent = 'Please fill in every field before confirming your order.';
+      error.textContent = t('errorFillAll', pageLang);
       error.classList.add('is-visible');
       return;
     }
     if (phone.replace(/[^0-9]/g, '').length < 9) {
-      error.textContent = 'Please enter a valid phone number.';
+      error.textContent = t('errorPhone', pageLang);
       error.classList.add('is-visible');
       return;
     }
@@ -202,17 +208,17 @@ function wireModal() {
     };
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Placing order…';
+    submitBtn.textContent = t('placingOrder', pageLang);
     try {
       const order = await addOrder(payload);
       sessionStorage.setItem('smartbags_last_order', JSON.stringify(order));
       window.location.href = 'thankyou.html';
     } catch (err) {
       console.error(err);
-      error.textContent = 'Could not place your order — please check your connection and try again.';
+      error.textContent = t('errorSubmit', pageLang);
       error.classList.add('is-visible');
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Confirm order';
+      submitBtn.textContent = t('confirmOrder', pageLang);
     }
   });
 }

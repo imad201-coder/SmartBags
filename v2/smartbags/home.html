@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,8 @@
 <meta name="description" content="Luxury smart bags and accessories. Fast delivery across the country, cash on delivery, check your item before paying.">
 <link rel="stylesheet" href="css/common.css">
 <link rel="stylesheet" href="css/home.css">
+<script src="js/i18n.js"></script>
+<script>applyDirection(getLang());</script>
 </head>
 <body>
 
@@ -19,8 +21,8 @@
 <main>
   <section class="shop" id="shop">
     <div class="shop-head">
-      <h2>The collection</h2>
-      <p>Modern silhouettes and luxury materials, quality-checked before every delivery.</p>
+      <h2 data-i18n="shopTitle">The collection</h2>
+      <p data-i18n="shopSubtitle">Modern silhouettes and luxury materials, quality-checked before every delivery.</p>
     </div>
     <div class="product-grid" id="product-grid"></div>
   </section>

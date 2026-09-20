@@ -108,3 +108,6 @@
   padding: 10px 20px;
   font-size: 13.5px;
 }
+
+/* ---------- RTL adjustments ---------- */
+[dir="rtl"] .card-badge { left: auto; right: 12px; }

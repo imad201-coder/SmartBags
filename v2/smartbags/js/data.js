@@ -76,7 +76,9 @@ function findProduct(data, id) {
   return data.products.find(p => p.id === id);
 }
 
-function formatPrice(n) {
+function formatPrice(n, lang) {
+  lang = lang || getLang();
   const num = Math.round(Number(n) || 0);
-  return num.toLocaleString('fr-FR').replace(/\u202F|\u00A0/g, ' ') + ' DA';
+  const formatted = num.toLocaleString('fr-FR').replace(/\u202F|\u00A0/g, ' ');
+  return formatted + ' ' + t('currency', lang);
 }
