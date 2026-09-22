@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="order-row"><span>${t('productLabel', lang)}</span><span>${escapeHtml(order.productName)}${order.color ? ' — ' + escapeHtml(order.color) : ''}</span></div>
       <div class="order-row"><span>${t('deliveryLabel', lang)}</span><span>${deliveryLabel} — ${escapeHtml(order.province)}</span></div>
       <div class="order-row"><span>${t('addressLabel2', lang)}</span><span>${escapeHtml(order.address)}</span></div>
-      <div class="order-row total"><span>${t('totalDueLabel', lang)}</span><span>${formatPrice(order.total, lang)}</span></div>
+      <div class="order-row total"><span>${t('totalDueLabel', lang)}</span><span dir="ltr">${formatPrice(order.total, lang)}</span></div>
     </div>
     <a class="btn btn-outline" href="/home">${t('continueShopping', lang)}</a>
   `;
