@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   `;
   
   if (typeof fbq === 'function') {
-    fbq('track', 'Purchase', {;
+    fbq('track', 'Purchase', {
       value: order.total, 
       currency: 'DZD'
     });
