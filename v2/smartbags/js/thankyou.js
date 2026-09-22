@@ -45,6 +45,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     <a class="btn btn-outline" href="/home">${t('continueShopping', lang)}</a>
   `;
 
+  if (typeof fbq === 'function') {
+    fbq('track', 'Purchase', {
+      value: order.total, 
+      currency: 'DZD'
+    });
+  }
+
   sessionStorage.removeItem('smartbags_last_order');
 });
 
