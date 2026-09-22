@@ -6,6 +6,17 @@ let sliderIndex = 0;
 let selectedColor = null;
 let pageLang = 'ar';
 
+/* The product page is reached either as a clean URL (/some-product-id,
+   rewritten server-side to product.html) or, for backward compatibility,
+   as the old product.html?id=some-product-id form. */
+function getRequestedProductId() {
+  const fromQuery = new URLSearchParams(window.location.search).get('id');
+  if (fromQuery) return fromQuery;
+  const path = window.location.pathname.replace(/^\/+/, '').replace(/\.html$/, '');
+  if (!path || path === 'product') return null;
+  return decodeURIComponent(path);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   pageLang = getLang();
   applyDirection(pageLang);
@@ -22,12 +33,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderNavbar(storeData, 'product', pageLang, true);
   renderFooter(storeData, pageLang);
 
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
+  const id = getRequestedProductId();
   currentProduct = id ? findProduct(storeData, id) : null;
 
   if (!currentProduct) {
-    window.location.href = 'home.html';
+    window.location.href = '/home';
     return;
   }
 
@@ -85,8 +95,8 @@ function renderProductInfo() {
     <h1 class="product-name">${currentProduct.name}</h1>
     <p class="product-short">${currentProduct.short}</p>
     <div class="product-price-row">
-      <span class="product-price-new" dir="ltr">${formatPrice(currentProduct.price, pageLang)}</span>
-      ${currentProduct.oldPrice ? `<span class="product-price-old" dir="ltr">${formatPrice(currentProduct.oldPrice, pageLang)}</span>` : ''}
+      <span class="product-price-new">${formatPrice(currentProduct.price, pageLang)}</span>
+      ${currentProduct.oldPrice ? `<span class="product-price-old">${formatPrice(currentProduct.oldPrice, pageLang)}</span>` : ''}
     </div>
     <div id="color-picker" class="color-picker"></div>
     <button class="btn btn-gold product-buy-btn" id="open-buy">${t('buyNow', pageLang)}</button>
@@ -212,7 +222,7 @@ function wireModal() {
     try {
       const order = await addOrder(payload);
       sessionStorage.setItem('smartbags_last_order', JSON.stringify(order));
-      window.location.href = 'thankyou.html';
+      window.location.href = '/thankyou';
     } catch (err) {
       console.error(err);
       error.textContent = t('errorSubmit', pageLang);

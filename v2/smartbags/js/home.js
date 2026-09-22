@@ -37,17 +37,17 @@ function renderProductGrid(data, lang) {
 
   mount.innerHTML = data.products.map(p => `
     <article class="card">
-      <a class="card-media" href="product.html?id=${encodeURIComponent(p.id)}">
+      <a class="card-media" href="/${encodeURIComponent(p.id)}">
         ${p.oldPrice ? `<span class="card-badge">${t('saleBadge', lang)}</span>` : ''}
         <img src="${p.images[0]}" alt="${p.name}" loading="lazy">
       </a>
       <h3 class="card-name">${p.name}</h3>
       <div class="card-bottom">
-        <div class="card-price" dir="ltr">
+        <div class="card-price">
           <span class="price-new">${formatPrice(p.price, lang)}</span>
           ${p.oldPrice ? `<span class="price-old">${formatPrice(p.oldPrice, lang)}</span>` : ''}
         </div>
-        <a class="btn btn-gold card-buy" href="product.html?id=${encodeURIComponent(p.id)}">${t('buyNow', lang)}</a>
+        <a class="btn btn-gold card-buy" href="/${encodeURIComponent(p.id)}">${t('buyNow', lang)}</a>
       </div>
     </article>
   `).join('');

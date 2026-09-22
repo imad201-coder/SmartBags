@@ -134,11 +134,15 @@ function readFileAsDataURL(file) {
   });
 }
 
+/* "home", "thankyou" and "admin" are reserved by vercel.json's routing —
+   a product with one of these ids would be unreachable at its clean URL. */
+const RESERVED_SLUGS = ['home', 'thankyou', 'admin'];
+
 function slugify(str) {
   let base = (str || 'product').toLowerCase().trim()
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'product';
   let id = base, n = 2;
-  while (adminData.products.some(p => p.id === id)) { id = `${base}-${n}`; n++; }
+  while (adminData.products.some(p => p.id === id) || RESERVED_SLUGS.includes(id)) { id = `${base}-${n}`; n++; }
   return id;
 }
 

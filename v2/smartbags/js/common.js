@@ -15,10 +15,10 @@ function renderNavbar(data, activePage, lang, showLangToggle) {
     <div class="nav-inner">
       <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
       <nav class="nav-links" id="nav-links">
-        <a href="home.html" class="${activePage === 'home' ? 'is-active' : ''}">${t('navHome', lang)}</a>
-        <a href="home.html#shop" class="${activePage === 'product' ? 'is-active' : ''}">${t('navShop', lang)}</a>
+        <a href="/home" class="${activePage === 'home' ? 'is-active' : ''}">${t('navHome', lang)}</a>
+        <a href="/home#shop" class="${activePage === 'product' ? 'is-active' : ''}">${t('navShop', lang)}</a>
       </nav>
-      <a href="home.html" class="nav-logo"><img src="${data.site.logo}" alt="${data.site.shopName}"></a>
+      <a href="/home" class="nav-logo"><img src="${data.site.logo}" alt="${data.site.shopName}"></a>
       <div class="nav-cta">
         <span class="nav-cta-text" dir="ltr">${data.site.phone}</span>
         ${showLangToggle ? `

@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="thankyou-mark">✓</div>
       <h1>${t('thankyouTitleNoOrder', lang)}</h1>
       <p class="lead">${t('thankyouLeadNoOrder', lang)}</p>
-      <a class="btn btn-gold" href="home.html">${t('backToShop', lang)}</a>
+      <a class="btn btn-gold" href="/home">${t('backToShop', lang)}</a>
     `;
     return;
   }
@@ -42,15 +42,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="order-row"><span>${t('addressLabel2', lang)}</span><span>${escapeHtml(order.address)}</span></div>
       <div class="order-row total"><span>${t('totalDueLabel', lang)}</span><span>${formatPrice(order.total, lang)}</span></div>
     </div>
-    <a class="btn btn-outline" href="home.html">${t('continueShopping', lang)}</a>
+    <a class="btn btn-outline" href="/home">${t('continueShopping', lang)}</a>
   `;
-  
-  if (typeof fbq === 'function') {
-    fbq('track', 'Purchase', {
-      value: order.total, 
-      currency: 'DZD'
-    });
-  }
 
   sessionStorage.removeItem('smartbags_last_order');
 });
