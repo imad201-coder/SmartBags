@@ -81,7 +81,8 @@ function moveSlider(dir) {
 
 function updateSlider() {
   const track = document.getElementById('slider-track');
-  track.style.transform = `translateX(-${sliderIndex * 100}%)`;
+  const dir = pageLang === 'ar' ? 1 : -1;
+  track.style.transform = `translateX(-${dir * sliderIndex * 100}%)`;
   document.querySelectorAll('.slider-dot').forEach((dot, i) => {
     dot.classList.toggle('is-active', i === sliderIndex);
   });
