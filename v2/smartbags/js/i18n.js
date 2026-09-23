@@ -9,7 +9,7 @@
    exactly as entered, in whichever language you typed it. */
 
 const LANG_KEY = 'smartbags_lang';
-const DEFAULT_LANG = 'ar';
+const DEFAULT_LANG = 'en';
 
 const TRANSLATIONS = {
   en: {
