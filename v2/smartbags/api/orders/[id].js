@@ -1,6 +1,6 @@
 const { readOrders, writeOrders, isAdmin, setCors, parseBody } = require('../_util');
 
-const VALID_STATUSES = ['waiting', 'confirmed', 'delivered', 'cancelled'];
+const VALID_STATUSES = ['waiting', 'processing', 'confirmed', 'shipped', 'delivered', 'cancelled'];
 
 module.exports = async function handler(req, res) {
   setCors(res);
