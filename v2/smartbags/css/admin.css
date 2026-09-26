@@ -164,7 +164,9 @@
   text-transform: capitalize;
 }
 .status-waiting { color: var(--gold-300); border-color: var(--gold-500); background: rgba(207,157,79,0.08); }
+.status-processing { color: #e0975a; border-color: #b8703a; background: rgba(224,151,90,0.1); }
 .status-confirmed { color: #7fb3e3; border-color: #3f6f9c; background: rgba(63,111,156,0.1); }
+.status-shipped { color: #b39ddb; border-color: #7e57c2; background: rgba(126,87,194,0.1); }
 .status-delivered { color: #7fcf9a; border-color: #3f9c63; background: rgba(63,156,99,0.1); }
 .status-cancelled { color: var(--danger); border-color: var(--danger); background: rgba(217,112,92,0.08); }
 .orders-empty { padding: 30px; text-align: center; color: var(--muted); font-size: 14px; }
