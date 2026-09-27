@@ -75,6 +75,8 @@ async function bootAdmin() {
   renderProvincesTab();
   await renderOrdersTab();
   wireOrderModal();
+  wireExpensesTab();
+  await renderExpensesTab();
   wireBackupTab();
   wireLogout();
 }
@@ -486,6 +488,110 @@ function wireOrderModal() {
     await renderOrdersTab();
     toast('Orders refreshed');
   }));
+}
+
+/* ============================================================
+   Expenses tab
+   ============================================================ */
+let editingExpenseId = null;
+
+async function renderExpensesTab() {
+  const wrap = document.getElementById('expenses-table-wrap');
+  const empty = document.getElementById('expenses-empty');
+
+  let expenses;
+  try {
+    expenses = await getExpenses();
+  } catch (e) {
+    if (e.message === 'UNAUTHORIZED') throw e;
+    console.error(e);
+    toast('Could not load expenses');
+    return;
+  }
+
+  if (!expenses.length) {
+    wrap.style.display = 'none';
+    empty.style.display = 'block';
+  } else {
+    wrap.style.display = '';
+    empty.style.display = 'none';
+    document.getElementById('expenses-table-body').innerHTML = expenses.map(x => `
+      <tr>
+        <td class="nowrap">${escHtml(x.date)}</td>
+        <td>${escHtml(x.comment)}</td>
+        <td class="nowrap">${formatPrice(x.amount, 'en')}</td>
+        <td>
+          <button class="icon-btn gold edit-expense" data-id="${x.id}">Edit</button>
+          <button class="icon-btn del-expense" data-id="${x.id}">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+
+    document.querySelectorAll('.edit-expense').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const exp = expenses.find(x => x.id === btn.dataset.id);
+        if (exp) startEditExpense(exp);
+      });
+    });
+    document.querySelectorAll('.del-expense').forEach(btn => {
+      btn.addEventListener('click', () => withAuthGuard(async () => {
+        if (!confirm('Delete this expense? This cannot be undone.')) return;
+        await deleteExpense(btn.dataset.id);
+        if (editingExpenseId === btn.dataset.id) resetExpenseForm();
+        await renderExpensesTab();
+        toast('Expense deleted');
+      }));
+    });
+  }
+
+  const total = expenses.reduce((sum, x) => sum + Number(x.amount || 0), 0);
+  document.getElementById('expenses-total').textContent = 'Total: ' + formatPrice(total, 'en');
+}
+
+function startEditExpense(exp) {
+  editingExpenseId = exp.id;
+  document.getElementById('exp-amount').value = exp.amount;
+  document.getElementById('exp-date').value = exp.date;
+  document.getElementById('exp-comment').value = exp.comment;
+  document.getElementById('expense-form-title').textContent = 'Edit expense';
+  document.getElementById('save-expense').textContent = 'Save changes';
+  document.getElementById('cancel-edit-expense').style.display = '';
+}
+
+function resetExpenseForm() {
+  editingExpenseId = null;
+  document.getElementById('exp-amount').value = '';
+  document.getElementById('exp-date').valueAsDate = new Date();
+  document.getElementById('exp-comment').value = '';
+  document.getElementById('expense-form-title').textContent = 'Add expense';
+  document.getElementById('save-expense').textContent = 'Add expense';
+  document.getElementById('cancel-edit-expense').style.display = 'none';
+}
+
+function wireExpensesTab() {
+  document.getElementById('exp-date').valueAsDate = new Date();
+
+  document.getElementById('save-expense').addEventListener('click', () => withAuthGuard(async () => {
+    const amount = Number(document.getElementById('exp-amount').value);
+    const date = document.getElementById('exp-date').value;
+    const comment = document.getElementById('exp-comment').value.trim();
+    if (!amount || amount <= 0 || !date || !comment) {
+      toast('Please fill in amount, date and reason');
+      return;
+    }
+
+    if (editingExpenseId) {
+      await updateExpense(editingExpenseId, { amount, date, comment });
+      toast('Expense updated');
+    } else {
+      await addExpense({ amount, date, comment });
+      toast('Expense added');
+    }
+    resetExpenseForm();
+    await renderExpensesTab();
+  }));
+
+  document.getElementById('cancel-edit-expense').addEventListener('click', resetExpenseForm);
 }
 
 /* ============================================================
