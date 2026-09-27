@@ -137,7 +137,7 @@ function readFileAsDataURL(file) {
 }
 
 /* Resizes to a max dimension and re-encodes as JPEG before upload —
-   keeps uploads comfortably under Vercel's 4.5MB request limit and
+   keeps uploads comfortably under Vercel's 4.5MB  request limit and
    makes stored images much smaller/faster to load. */
 function compressImageFile(file, maxDim = 1600, quality = 0.82) {
   return new Promise((resolve, reject) => {
