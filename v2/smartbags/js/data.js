@@ -55,6 +55,49 @@ async function updateOrderStatus(id, status) {
   return res.json();
 }
 
+/* ---------- expenses (admin-only) ---------- */
+async function getExpenses() {
+  const res = await fetch('/api/expenses', {
+    headers: { 'Authorization': 'Bearer ' + getAdminToken() }
+  });
+  if (res.status === 401) throw new Error('UNAUTHORIZED');
+  if (!res.ok) throw new Error('Could not load expenses');
+  return res.json();
+}
+
+/* expense: { amount, date, comment } */
+async function addExpense(expense) {
+  const res = await fetch('/api/expenses', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getAdminToken() },
+    body: JSON.stringify(expense)
+  });
+  if (res.status === 401) throw new Error('UNAUTHORIZED');
+  if (!res.ok) throw new Error('Could not add the expense');
+  return res.json();
+}
+
+async function updateExpense(id, updates) {
+  const res = await fetch('/api/expenses/' + encodeURIComponent(id), {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getAdminToken() },
+    body: JSON.stringify(updates)
+  });
+  if (res.status === 401) throw new Error('UNAUTHORIZED');
+  if (!res.ok) throw new Error('Could not update the expense');
+  return res.json();
+}
+
+async function deleteExpense(id) {
+  const res = await fetch('/api/expenses/' + encodeURIComponent(id), {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + getAdminToken() }
+  });
+  if (res.status === 401) throw new Error('UNAUTHORIZED');
+  if (!res.ok) throw new Error('Could not delete the expense');
+  return res.json();
+}
+
 /* ---------- admin session (the password itself acts as the token) ---------- */
 async function adminLogin(password) {
   const res = await fetch('/api/login', {
