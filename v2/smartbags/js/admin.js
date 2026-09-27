@@ -166,7 +166,6 @@ function compressImageFile(file, maxDim = 1600, quality = 0.82) {
     reader.readAsDataURL(file);
   });
 }
-
 /* "home", "thankyou" and "admin" are reserved by vercel.json's routing —
    a product with one of these ids would be unreachable at its clean URL. */
 const RESERVED_SLUGS = ['home', 'thankyou', 'admin'];
