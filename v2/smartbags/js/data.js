@@ -126,7 +126,6 @@ function formatPrice(n, lang) {
   return formatted + ' ' + t('currency', lang);
 }
 
-
 /* Uploads a compressed image (already a data: URL) to Vercel Blob and
    returns its public URL. Admin-only. */
 async function uploadImage(dataUrl, filename) {
