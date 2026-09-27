@@ -136,6 +136,37 @@ function readFileAsDataURL(file) {
   });
 }
 
+/* Resizes to a max dimension and re-encodes as JPEG before upload —
+   keeps uploads comfortably under Vercel's 4.5MB request limit and
+   makes stored images much smaller/faster to load. */
+function compressImageFile(file, maxDim = 1600, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) { height = Math.round(height * maxDim / width); width = maxDim; }
+          else { width = Math.round(width * maxDim / height); height = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve({
+          dataUrl: canvas.toDataURL('image/jpeg', quality),
+          filename: (file.name || 'image').replace(/\.[^.]+$/, '') + '.jpg'
+        });
+      };
+      img.onerror = () => reject(new Error('Could not read image'));
+      img.src = reader.result;
+    };
+    reader.onerror = () => reject(new Error('Could not read file'));
+    reader.readAsDataURL(file);
+  });
+}
+
 /* "home", "thankyou" and "admin" are reserved by vercel.json's routing —
    a product with one of these ids would be unreachable at its clean URL. */
 const RESERVED_SLUGS = ['home', 'thankyou', 'admin'];
@@ -188,20 +219,24 @@ function renderSettingsTab() {
     });
   });
 
-  document.getElementById('s-logo-file').addEventListener('change', async (e) => {
+  document.getElementById('s-logo-file').addEventListener('change', (e) => withAuthGuard(async () => {
     const file = e.target.files[0];
     if (!file) return;
-    const dataUrl = await readFileAsDataURL(file);
-    adminData.site.logo = dataUrl;
-    document.getElementById('s-logo-preview').src = dataUrl;
-  });
-  document.getElementById('s-banner-file').addEventListener('change', async (e) => {
+    const { dataUrl, filename } = await compressImageFile(file);
+    const url = await uploadImage(dataUrl, filename);
+    adminData.site.logo = url;
+    document.getElementById('s-logo-preview').src = url;
+    toast('Logo uploaded');
+  }));
+  document.getElementById('s-banner-file').addEventListener('change', (e) => withAuthGuard(async () => {
     const file = e.target.files[0];
     if (!file) return;
-    const dataUrl = await readFileAsDataURL(file);
-    adminData.site.banner = dataUrl;
-    document.getElementById('s-banner-preview').src = dataUrl;
-  });
+    const { dataUrl, filename } = await compressImageFile(file);
+    const url = await uploadImage(dataUrl, filename);
+    adminData.site.banner = url;
+    document.getElementById('s-banner-preview').src = url;
+    toast('Banner uploaded');
+  }));
 
   document.getElementById('save-settings').addEventListener('click', () => withAuthGuard(async () => {
     await saveData(adminData);
@@ -316,13 +351,14 @@ function renderProductsTab() {
     });
   });
   mount.querySelectorAll('.add-img-file').forEach(inp => {
-    inp.addEventListener('change', async (e) => {
+    inp.addEventListener('change', (e) => withAuthGuard(async () => {
       const file = e.target.files[0];
       if (!file) return;
-      const dataUrl = await readFileAsDataURL(file);
-      adminData.products[Number(e.target.dataset.i)].images.push(dataUrl);
+      const { dataUrl, filename } = await compressImageFile(file);
+      const url = await uploadImage(dataUrl, filename);
+      adminData.products[Number(e.target.dataset.i)].images.push(url);
       renderProductsTab();
-    });
+    }));
   });
 
   mount.querySelectorAll('.color-hex').forEach(inp => {
