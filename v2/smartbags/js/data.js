@@ -125,3 +125,17 @@ function formatPrice(n, lang) {
   const formatted = num.toLocaleString('fr-FR').replace(/\u202F|\u00A0/g, ' ');
   return formatted + ' ' + t('currency', lang);
 }
+
+/* Uploads a compressed image (already a data: URL) to Vercel Blob and
+   returns its public URL. Admin-only. */
+async function uploadImage(dataUrl, filename) {
+  const res = await fetch('/api/upload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getAdminToken() },
+    body: JSON.stringify({ dataUrl, filename })
+  });
+  if (res.status === 401) throw new Error('UNAUTHORIZED');
+  if (!res.ok) throw new Error('Could not upload the image');
+  const result = await res.json();
+  return result.url;
+}
