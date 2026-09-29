@@ -18,7 +18,7 @@ function renderNavbar(data, activePage, lang, showLangToggle) {
         <a href="/home" class="${activePage === 'home' ? 'is-active' : ''}">${t('navHome', lang)}</a>
         <a href="/home#shop" class="${activePage === 'product' ? 'is-active' : ''}">${t('navShop', lang)}</a>
       </nav>
-      <a href="/home" class="nav-logo"><img src="${data.site.logo}" alt="${data.site.shopName}"></a>
+      <a href="/home" class="nav-logo"><img src="./images/logo-removbg-preview.png" alt="${data.site.shopName}"></a>
       <div class="nav-cta">
         <span class="nav-cta-text" dir="ltr">${data.site.phone}</span>
         ${showLangToggle ? `
