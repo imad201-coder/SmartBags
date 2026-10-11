@@ -152,7 +152,9 @@ function wireModal() {
   const error = document.getElementById('form-error');
   const submitBtn = form.querySelector('button[type="submit"]');
 
-  const sortedProvinces = [...storeData.provinces].sort((a, b) => a.name.localeCompare(b.name));
+  const companies = storeData.deliveryCompanies || [];
+  const company = companies.find(c => c.id === currentProduct.deliveryCompany) || companies[0] || { provinces: storeData.provinces };
+  const sortedProvinces = [...company.provinces].sort((a, b) => a.name.localeCompare(b.name));
 
   function feeForType(p, type) { return type === 'domicile' ? p.domicileFee : p.deskFee; }
   function currentType() { return document.querySelector('input[name="delivery-type"]:checked')?.value || 'desk'; }
