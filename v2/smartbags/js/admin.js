@@ -73,6 +73,7 @@ async function bootAdmin() {
   renderIconsTab();
   renderProductsTab();
   renderProvincesTab();
+  wireProvincesTab();
   await renderOrdersTab();
   wireOrderModal();
   wireExpensesTab();
@@ -109,9 +110,9 @@ async function withAuthGuard(fn) {
 
 /* ---------- tabs ---------- */
 function wireTabs() {
-  document.querySelectorAll('.admin-tab').forEach(btn => {
+  document.querySelectorAll('.admin-tab[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('is-active'));
+      document.querySelectorAll('.admin-tab[data-tab]').forEach(b => b.classList.remove('is-active'));
       document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('is-active'));
       btn.classList.add('is-active');
       document.getElementById('tab-' + btn.dataset.tab).classList.add('is-active');
@@ -300,6 +301,12 @@ function renderProductsTab() {
         <div class="admin-field"><label>Price (DA)</label><input type="number" min="0" data-i="${i}" data-f="price" class="p-input" value="${p.price}"></div>
         <div class="admin-field"><label>Old price (DA, optional)</label><input type="number" min="0" data-i="${i}" data-f="oldPrice" class="p-input" value="${p.oldPrice ?? ''}"></div>
       </div>
+      <div class="admin-field">
+        <label>Delivery company</label>
+        <select data-i="${i}" class="p-company">
+          ${adminData.deliveryCompanies.map(c => `<option value="${c.id}"${p.deliveryCompany === c.id ? ' selected' : ''}>${escHtml(c.name) || 'Unnamed'}</option>`).join('')}
+        </select>
+      </div>
       <div class="admin-field"><label>Description</label><textarea rows="3" data-i="${i}" data-f="description" class="p-input">${escHtml(p.description)}</textarea></div>
       <div class="admin-field">
         <label>Colors</label>
@@ -333,6 +340,11 @@ function renderProductsTab() {
       if (f === 'name') {
         e.target.closest('.product-item').querySelector('.product-item-head strong').textContent = e.target.value || 'New product';
       }
+    });
+  });
+  mount.querySelectorAll('.p-company').forEach(sel => {
+    sel.addEventListener('change', e => {
+      adminData.products[Number(e.target.dataset.i)].deliveryCompany = e.target.value;
     });
   });
   mount.querySelectorAll('[id^="del-product-"]').forEach((btn, idx) => {
@@ -407,22 +419,45 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ============================================================
    Provinces & delivery tab
    ============================================================ */
+let currentCompanyIndex = 0;
+
 function renderProvincesTab() {
-  const rows = adminData.provinces.map((p, i) => `
+  if (currentCompanyIndex >= adminData.deliveryCompanies.length) currentCompanyIndex = 0;
+  const switcher = document.getElementById('company-switcher');
+  switcher.innerHTML = adminData.deliveryCompanies.map((c, i) =>
+    `<button type="button" class="admin-tab${i === currentCompanyIndex ? ' is-active' : ''}" data-i="${i}">${escHtml(c.name) || 'Unnamed'}</button>`
+  ).join('');
+  switcher.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCompanyIndex = Number(btn.dataset.i);
+      renderProvincesTab();
+    });
+  });
+
+  const company = adminData.deliveryCompanies[currentCompanyIndex];
+  document.getElementById('company-name').value = company.name;
+  const rows = company.provinces.map((p, i) => `
     <tr>
       <td>${escHtml(p.name)}</td>
       <td><input type="number" min="0" data-i="${i}" data-f="deskFee" class="prov-fee" value="${p.deskFee}"></td>
       <td><input type="number" min="0" data-i="${i}" data-f="domicileFee" class="prov-fee" value="${p.domicileFee}"></td>
     </tr>
   `).join('');
-
   document.getElementById('provinces-table-body').innerHTML = rows;
   document.querySelectorAll('.prov-fee').forEach(inp => {
     inp.addEventListener('input', e => {
-      adminData.provinces[Number(e.target.dataset.i)][e.target.dataset.f] = Number(e.target.value) || 0;
+      company.provinces[Number(e.target.dataset.i)][e.target.dataset.f] = Number(e.target.value) || 0;
     });
   });
+}
 
+function wireProvincesTab() {
+  document.getElementById('company-name').addEventListener('input', e => {
+    adminData.deliveryCompanies[currentCompanyIndex].name = e.target.value;
+    const activeBtn = document.querySelector('#company-switcher button.is-active');
+    if (activeBtn) activeBtn.textContent = e.target.value || 'Unnamed';
+    renderProductsTab();
+  });
   document.getElementById('save-provinces').addEventListener('click', () => withAuthGuard(async () => {
     await saveData(adminData);
     toast('Delivery fees saved');
@@ -648,7 +683,7 @@ function wireBackupTab() {
     if (!file) return;
     const text = await file.text();
     const parsed = JSON.parse(text);
-    if (!parsed.site || !parsed.products || !parsed.provinces) throw new Error('Invalid file');
+    if (!parsed.site || !parsed.products || !parsed.deliveryCompanies) throw new Error('Invalid file');
     adminData = parsed;
     await saveData(adminData);
     renderNavbar(adminData, '', 'en', false);
