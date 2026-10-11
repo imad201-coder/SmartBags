@@ -17,7 +17,7 @@ module.exports = async function handler(req, res) {
   if (req.method === 'POST') {
     if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
     const body = parseBody(req);
-    if (!body.site || !body.products || !body.provinces) {
+    if (!body.site || !body.products || !body.deliveryCompanies) {
       return res.status(400).json({ error: 'Invalid store data' });
     }
     try {
