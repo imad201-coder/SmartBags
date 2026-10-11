@@ -20,7 +20,30 @@ const DATA_KEY = 'smartbags:data';
 const ORDERS_KEY = 'smartbags:orders';
 const EXPENSES_KEY = 'smartbags:expenses';
 
+/* Delivery fees are now kept per delivery company. Data saved before that
+   change (a single `provinces` table) is converted on the fly: your existing
+   fee table becomes "Company 1", "Company 2" starts as a copy of it, and
+   every product is tagged Company 1. Nothing is lost, and nothing is written
+   back until you next save in Admin. */
+function migrateData(data) {
+  if (!data || data.deliveryCompanies) return data;
+  const provinces = Array.isArray(data.provinces) ? data.provinces : [];
+  const { provinces: _old, ...rest } = data;
+  return {
+    ...rest,
+    deliveryCompanies: [
+      { id: 'company1', name: 'Company 1', provinces: provinces.map(p => ({ ...p })) },
+      { id: 'company2', name: 'Company 2', provinces: provinces.map(p => ({ ...p })) }
+    ],
+    products: (data.products || []).map(p => ({ ...p, deliveryCompany: p.deliveryCompany || 'company1' }))
+  };
+}
+
 async function readData() {
+  return migrateData(await readDataRaw());
+}
+
+async function readDataRaw() {
   const raw = await redis.get(DATA_KEY);
   if (!raw) return DEFAULT_DATA;
   try {
